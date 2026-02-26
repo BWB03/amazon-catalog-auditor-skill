@@ -190,6 +190,54 @@ Want me to rewrite examples for your top 3 SKUs?
 
 The skill uses the CLI tool under the hood, so all 9 queries stay up-to-date automatically when the CLI is updated.
 
+## Security & Safety
+
+**This skill is designed with security in mind:**
+
+### What It Does ✅
+- **Read-only operations** - Only reads CLR files from your workspace
+- **Deterministic parsing** - Pure Python logic, no AI model calls
+- **Local execution** - All processing happens on your machine
+- **Output files only** - Creates reports in workspace, nothing else
+- **Open source** - Full code transparency
+
+### What It Doesn't Do ❌
+- **No network calls** - Doesn't phone home or transmit data
+- **No credential storage** - Doesn't ask for or store API keys
+- **No system modifications** - Doesn't touch files outside workspace
+- **No external dependencies** - Only uses `amazon-catalog-cli` (also open source)
+- **No telemetry** - Zero tracking or analytics
+
+### Skill Safety Best Practices
+
+When evaluating **any** OpenClaw skill (including this one):
+
+1. **Review the code** - Check `SKILL.md` and `scripts/` folder
+2. **Verify dependencies** - Fewer is better, inspect what gets installed
+3. **Check the source** - Install from trusted developers/official repos
+4. **Understand permissions** - Know what file access the skill needs
+5. **Monitor behavior** - Watch what commands it runs
+
+### Worst-Case Scenario
+
+If this skill had a bug or was compromised:
+- ❌ **NOT possible:** System compromise, data theft, malicious execution
+- ✅ **Possible:** Incorrect audit results, file path errors, skill crashes
+
+**Why it's safe:** The skill is a thin wrapper around a deterministic CLI tool. It doesn't make decisions, doesn't connect to external services, and operates entirely within your workspace sandbox.
+
+### Trust Chain
+
+1. **amazon-catalog-cli** - Open source Python package on PyPI
+2. **This skill** - Wraps the CLI with OpenClaw-friendly interface
+3. **Your OpenClaw instance** - Executes within your configured sandbox
+
+All three layers are auditable, transparent, and under your control.
+
+### Questions or Concerns?
+
+Open an issue on GitHub or review the code yourself. Security through transparency.
+
 ## Related Projects
 
 - **[amazon-catalog-cli](https://github.com/BWB03/amazon-catalog-cli)** - Standalone CLI tool (required)
