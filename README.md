@@ -19,6 +19,11 @@ The skill automatically:
 - Presents prioritized insights
 - Provides actionable recommendations
 
+**New in CLI v1.1.0:**
+- 🎯 **RUFUS tier scoring** - Each SKU gets a health rating (Good/Fair/Weak/Critical)
+- 📊 **Catalog-wide summary** - Overall score + distribution stats
+- 🧹 **FBM duplicate filtering** - Auto-skips redundant FBM/MFN SKUs (cleaner reports)
+
 ## Installation
 
 ### Prerequisites
