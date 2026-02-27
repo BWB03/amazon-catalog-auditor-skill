@@ -274,7 +274,7 @@ MIT License - Free to use, modify, and distribute.
 
 ## Author
 
-Built by Brett Wilson ([@BWB03](https://github.com/BWB03))
+Built by Brett Bohannon ([@BWB03](https://github.com/BWB03))
 
 Amazon consulting veteran, AI automation enthusiast, OpenClaw power user.
 
