@@ -19,7 +19,13 @@ The skill automatically:
 - Presents prioritized insights
 - Provides actionable recommendations
 
-**New in CLI v1.1.0:**
+**New in CLI v1.2.0:**
+- ✅ **Bullet point compliance** - Comprehensive validation against Amazon's official requirements
+- 🚫 **Prohibited content detection** - Finds banned chars, emojis, placeholder text, prohibited claims
+- 📝 **Formatting validation** - Checks capitalization, length, punctuation rules
+- 🐛 **Critical bug fix** - Product descriptions no longer incorrectly flagged
+
+**Previous updates (v1.1.0):**
 - 🎯 **RUFUS tier scoring** - Each SKU gets a health rating (Good/Fair/Weak/Critical)
 - 📊 **Catalog-wide summary** - Overall score + distribution stats
 - 🧹 **FBM duplicate filtering** - Auto-skips redundant FBM/MFN SKUs (cleaner reports)
@@ -101,17 +107,19 @@ Summary report ready to share.
 
 ## Features
 
-### 9 Built-in Checks
+### 11 Built-in Checks
 
 1. **Missing Attributes** - Required fields
 2. **Missing Any Attributes** - Required + conditional
 3. **Long Titles** - Over 200 characters
 4. **Title Prohibited Chars** - Invalid characters
 5. **RUFUS Bullets** - AI optimization scoring
-6. **Prohibited Chars** - Invalid characters anywhere
-7. **Product Type Mismatch** - Type/keyword alignment
-8. **Missing Variations** - Variation opportunities
-9. **New Attributes** - Unused template fields
+6. **Prohibited Chars** - Invalid characters in title/brand
+7. **Bullet Prohibited Content** - Detects banned chars, emojis, claims, placeholders (NEW v1.2.0)
+8. **Bullet Formatting** - Validates capitalization, length, punctuation (NEW v1.2.0)
+9. **Product Type Mismatch** - Type/keyword alignment
+10. **Missing Variations** - Variation opportunities
+11. **New Attributes** - Unused template fields
 
 ### Intelligent Analysis
 
@@ -176,7 +184,7 @@ Want me to rewrite examples for your top 3 SKUs?
 ## Requirements
 
 - **OpenClaw** 2024.2+
-- **amazon-catalog-cli** 1.0.0+
+- **amazon-catalog-cli** 1.2.0+ (recommended for bullet validation features)
 - **Python** 3.7+
 
 ## How It Works
@@ -188,7 +196,7 @@ Want me to rewrite examples for your top 3 SKUs?
 5. Presents human-readable insights
 6. Offers export options if needed
 
-The skill uses the CLI tool under the hood, so all 9 queries stay up-to-date automatically when the CLI is updated.
+The skill uses the CLI tool under the hood, so all 11 queries stay up-to-date automatically when the CLI is updated.
 
 ## Security & Safety
 
