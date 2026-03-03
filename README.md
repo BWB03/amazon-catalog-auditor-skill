@@ -19,13 +19,17 @@ The skill automatically:
 - Presents prioritized insights
 - Provides actionable recommendations
 
-**New in CLI v1.2.0:**
+**New in CLI v1.3.0:**
+- 🌍 **Marketplace detection** - Auto-detects US/CA/UK/DE/etc from CLR metadata
+- ⚠️ **Bullet awareness checks** - Flags soft violations (excessive caps, problematic chars)
+- 📈 **12 total queries** - Up from 11 (new: bullet-awareness)
+
+**v1.2.0:**
 - ✅ **Bullet point compliance** - Comprehensive validation against Amazon's official requirements
 - 🚫 **Prohibited content detection** - Finds banned chars, emojis, placeholder text, prohibited claims
 - 📝 **Formatting validation** - Checks capitalization, length, punctuation rules
-- 🐛 **Critical bug fix** - Product descriptions no longer incorrectly flagged
 
-**Previous updates (v1.1.0):**
+**v1.1.0:**
 - 🎯 **RUFUS tier scoring** - Each SKU gets a health rating (Good/Fair/Weak/Critical)
 - 📊 **Catalog-wide summary** - Overall score + distribution stats
 - 🧹 **FBM duplicate filtering** - Auto-skips redundant FBM/MFN SKUs (cleaner reports)
@@ -107,7 +111,7 @@ Summary report ready to share.
 
 ## Features
 
-### 11 Built-in Checks
+### 12 Built-in Checks
 
 1. **Missing Attributes** - Required fields
 2. **Missing Any Attributes** - Required + conditional
@@ -115,11 +119,12 @@ Summary report ready to share.
 4. **Title Prohibited Chars** - Invalid characters
 5. **RUFUS Bullets** - AI optimization scoring
 6. **Prohibited Chars** - Invalid characters in title/brand
-7. **Bullet Prohibited Content** - Detects banned chars, emojis, claims, placeholders (NEW v1.2.0)
-8. **Bullet Formatting** - Validates capitalization, length, punctuation (NEW v1.2.0)
-9. **Product Type Mismatch** - Type/keyword alignment
-10. **Missing Variations** - Variation opportunities
-11. **New Attributes** - Unused template fields
+7. **Bullet Prohibited Content** - Detects banned chars, emojis, claims, placeholders (v1.2.0)
+8. **Bullet Formatting** - Validates capitalization, length, punctuation (v1.2.0)
+9. **Bullet Awareness** - Soft violations: excessive caps, problematic special chars (NEW v1.3.0)
+10. **Product Type Mismatch** - Type/keyword alignment
+11. **Missing Variations** - Variation opportunities
+12. **New Attributes** - Unused template fields
 
 ### Intelligent Analysis
 
@@ -184,19 +189,19 @@ Want me to rewrite examples for your top 3 SKUs?
 ## Requirements
 
 - **OpenClaw** 2024.2+
-- **amazon-catalog-cli** 1.2.0+ (recommended for bullet validation features)
+- **amazon-catalog-cli** 1.3.0+ (recommended for marketplace detection and bullet awareness)
 - **Python** 3.7+
 
 ## How It Works
 
 1. User uploads CLR or provides file path
 2. Skill runs `catalog scan` command
-3. Parses JSON output
+3. Parses JSON output (now includes marketplace metadata)
 4. Analyzes by severity and priority
 5. Presents human-readable insights
 6. Offers export options if needed
 
-The skill uses the CLI tool under the hood, so all 11 queries stay up-to-date automatically when the CLI is updated.
+The skill uses the CLI tool under the hood, so all 12 queries stay up-to-date automatically when the CLI is updated.
 
 ## Security & Safety
 

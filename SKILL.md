@@ -9,14 +9,23 @@ Audit Amazon Category Listing Reports using the `amazon-catalog-cli` tool. Ident
 
 ## Overview
 
-This skill wraps the `amazon-catalog-cli` PyPI package (v1.1.0+) to provide automated CLR analysis. When a user asks to audit a CLR, check catalog health, or analyze Amazon listings, this skill:
+This skill wraps the `amazon-catalog-cli` PyPI package (v1.3.0+) to provide automated CLR analysis. When a user asks to audit a CLR, check catalog health, or analyze Amazon listings, this skill:
 
 1. Locates the CLR file (uploaded or path provided)
 2. Runs appropriate catalog queries
 3. Parses and presents results in human-readable format
 4. Provides actionable recommendations
+5. Detects marketplace and flags non-US CLRs
 
-**New in v1.1.0:**
+**New in v1.3.0:**
+- **Marketplace detection** - Auto-detects US/CA/UK/DE/etc from CLR
+- **Bullet awareness checks** - Soft violations (excessive caps, problematic chars)
+- 12 total queries (up from 9)
+
+**v1.2.0:**
+- Comprehensive bullet point validation (prohibited content, formatting)
+
+**v1.1.0:**
 - RUFUS tier scoring (Good/Fair/Weak/Critical)
 - Catalog-wide RUFUS summary stats
 - Automatic FBM/MFN duplicate filtering
@@ -50,7 +59,7 @@ pip3 install amazon-catalog-cli
 ### Basic Usage
 
 ```bash
-# Full scan (all 9 queries)
+# Full scan (all 12 queries)
 catalog scan <clr-file>
 
 # Specific query
@@ -62,17 +71,25 @@ catalog scan <clr-file> --format json
 
 ## Available Queries
 
-The tool provides 9 built-in queries:
+The tool provides 12 built-in queries:
 
+### Attribute Audits
 1. **missing-attributes** - Required fields missing
 2. **missing-any-attributes** - All missing fields (required + conditional)
-3. **long-titles** - Titles exceeding 200 characters
-4. **title-prohibited-chars** - Prohibited characters in titles
-5. **rufus-bullets** - RUFUS AI optimization scoring
-6. **prohibited-chars** - Prohibited characters in any field
-7. **product-type-mismatch** - Product type / item type keyword mismatches
-8. **missing-variations** - Products that should be variations
-9. **new-attributes** - Unused template fields
+3. **new-attributes** - Unused template fields
+
+### Content Quality
+4. **rufus-bullets** - RUFUS AI optimization scoring
+5. **bullet-prohibited-content** - Prohibited chars, emojis, claims, placeholders in bullets
+6. **bullet-formatting** - Capitalization, length, punctuation rules
+7. **bullet-awareness** - Soft violations (excessive caps, problematic special chars)
+8. **long-titles** - Titles exceeding 200 characters
+9. **title-prohibited-chars** - Prohibited characters in titles
+10. **prohibited-chars** - Basic character validation (title/brand)
+
+### Catalog Structure
+11. **product-type-mismatch** - Product type / item type keyword mismatches
+12. **missing-variations** - Products that should be variations
 
 ## Workflow
 
@@ -171,12 +188,63 @@ Use `scripts/parse_audit.py` to process JSON results into human-readable insight
 2. Compare issue counts, affected SKUs
 3. Highlight improvements or new issues
 
+### Use Case 5: Multi-Marketplace Detection (v1.3.0)
+
+**User:** "Audit this CLR - is it for Canada or US?"
+
+**Action:**
+1. Run: `catalog scan <file> --format json`
+2. Check `marketplace` field in output
+3. If not US, flag any US-specific issues that may not apply
+4. Present findings with marketplace context
+
+**Example response:**
+```
+🌍 **Marketplace:** Canada (CA)
+
+Note: This is a Canadian marketplace CLR. Some content rules may differ from US.
+
+📊 **Summary:**
+- 47 issues found
+- 23 SKUs affected
+...
+```
+
+### Use Case 6: Bullet Soft Violations (v1.3.0)
+
+**User:** "Check my bullets for potential issues Amazon might not like"
+
+**Action:**
+1. Run: `catalog check bullet-awareness <file> --format json`
+2. Flag bullets with:
+   - All caps at beginning (PREMIUM QUALITY...)
+   - Excessive capitalization (>30% of text)
+   - Problematic special characters (unusual quotes, math symbols, arrows)
+3. Provide suggestions for each
+
+**Example finding:**
+```
+⚠️ **Bullet Awareness Issues Found**
+
+SKU: ABC-123, Bullet Point 1:
+- Begins with all caps: "PREMIUM QUALITY FORMULA..."
+  → Consider: "Premium quality formula delivers..."
+
+SKU: XYZ-456, Bullet Point 2:
+- Excessive caps (42% of text)
+- Problematic character: '→' (arrow)
+  → Consider removing special chars and using sentence case
+```
+
 ## Output Interpretation
 
 ### JSON Structure
 
 ```json
 {
+  "timestamp": "2026-03-03T10:30:00Z",
+  "marketplace": "US",
+  "is_us_marketplace": true,
   "total_issues": 5904,
   "total_affected_skus": 95,
   "queries": [
@@ -192,17 +260,34 @@ Use `scripts/parse_audit.py` to process JSON results into human-readable insight
           "severity": "required",
           "details": "Missing required field: brand"
         }
-      ]
+      ],
+      "metadata": {
+        "total_listings": 150,
+        "marketplace": "US",
+        "is_us_marketplace": true
+      }
     }
   ]
 }
 ```
+
+### Marketplace Detection (v1.3.0)
+
+The CLI now auto-detects marketplace from CLR metadata:
+- **marketplace** - Two-letter code (US, CA, UK, DE, FR, IT, ES, JP, AU, IN, MX, BR)
+- **is_us_marketplace** - Boolean flag for US market
+
+**Use cases:**
+- Multi-marketplace workflows (different rules per market)
+- Client reporting (show which marketplace was audited)
+- Routing logic (US vs international handling)
 
 ### Severity Levels
 
 - **required** - Must fix (Amazon rejects listings)
 - **conditional** - Fix based on product type
 - **warning** - Best practice issue (RUFUS, title length)
+- **awareness** - Soft violations (worth reviewing but not critical)
 - **info** - Suggestions (unused fields, variations)
 
 ### Prioritization Logic
@@ -310,6 +395,45 @@ pip3 show amazon-catalog-cli
 
 For CLRs with 1000+ SKUs, expect 10-15 second processing time. This is normal.
 
+## New Features Detail (v1.3.0)
+
+### Marketplace Detection
+
+Automatically detects marketplace from CLR Row 1 settings:
+- Supports: US, CA, UK, DE, FR, IT, ES, JP, AU, IN, MX, BR
+- Defaults to US if not detected
+- Useful for multi-marketplace sellers
+
+**Access in JSON:**
+```json
+{
+  "marketplace": "CA",
+  "is_us_marketplace": false,
+  ...
+}
+```
+
+### Bullet Awareness Checks
+
+New `bullet-awareness` query detects soft violations:
+
+**All Caps at Beginning:**
+- Flags 3+ consecutive words in ALL CAPS
+- Example: "PREMIUM QUALITY FORMULA" → Should be "Premium quality formula"
+
+**Excessive Capitalization:**
+- Flags bullets with >30% caps
+- Helps avoid "shouting" at customers
+
+**Problematic Special Characters:**
+- Unusual quotes: ", ", «, », ‹, ›
+- Math symbols: ×, ÷, ≈, ≠
+- Arrows: →, ←, ↑, ↓
+
+**Note:** Smart punctuation (em-dash, en-dash) is OK and NOT flagged.
+
+**Severity:** `awareness` (new level - worth reviewing but not critical)
+
 ## Integration with Other Tools
 
 ### With Google Sheets
@@ -324,6 +448,7 @@ If CLR data is in Google Sheets:
 1. Run audit with JSON export
 2. Use parsed insights to generate client-facing report
 3. Attach CSV for detailed breakdown
+4. Include marketplace info in report header
 
 ## Resources
 
@@ -334,15 +459,27 @@ See `references/queries.md` for detailed documentation on each query type and `s
 **Quick Reference:**
 
 ```bash
-# Full audit
+# Full audit (all 12 queries)
 catalog scan file.xlsx
 
-# Specific check
-catalog check [query-name] file.xlsx
+# Specific checks
+catalog check missing-attributes file.xlsx
+catalog check rufus-bullets file.xlsx
+catalog check bullet-awareness file.xlsx  # New in v1.3.0
 
-# JSON export
+# JSON export (includes marketplace)
 catalog scan file.xlsx --format json --output results.json
 
 # List all queries
 catalog list-queries file.xlsx
+
+# Check marketplace
+catalog scan file.xlsx --format json | grep "marketplace"
+```
+
+**Version:** Requires amazon-catalog-cli v1.3.0+
+
+**Upgrade:**
+```bash
+pip3 install --upgrade amazon-catalog-cli
 ```
