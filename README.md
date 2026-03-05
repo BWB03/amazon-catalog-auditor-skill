@@ -19,20 +19,33 @@ The skill automatically:
 - Presents prioritized insights
 - Provides actionable recommendations
 
-**New in CLI v1.3.0:**
-- 🌍 **Marketplace detection** - Auto-detects US/CA/UK/DE/etc from CLR metadata
-- ⚠️ **Bullet awareness checks** - Flags soft violations (excessive caps, problematic chars)
-- 📈 **12 total queries** - Up from 11 (new: bullet-awareness)
+**New in CLI v2.0.0 — Agent-First Redesign:**
+
+> **Note:** v2.0 of amazon-catalog-cli now ships with a built-in `SKILL.md` and an MCP server (`catalog mcp`). For MCP-compatible clients (Claude Desktop, CLR Pro, etc.), the CLI itself is now a first-class agent surface — no separate skill wrapper needed. This OpenClaw skill remains useful for OpenClaw-specific workflows.
+
+- **MCP server** - `catalog mcp` exposes `catalog_scan`, `catalog_check`, `catalog_list_queries`, `catalog_schema` as MCP tools
+- **JSON/stdin input** - `catalog scan --json '{...}'` or piped via `--stdin`
+- **Schema introspection** - `catalog schema --format json` for auto-discovery
+- **Field masks** - `--fields sku,severity,details` to reduce output size
+- **Pagination** - `--limit` and `--offset` for large catalogs
+- **NDJSON streaming** - `--format ndjson` for line-by-line output
+- **Input validation** - Rejects path traversal, injection, malformed input
+- **Backward compatible** - All v1.x commands work unchanged
+
+**v1.3.0:**
+- Marketplace detection - Auto-detects US/CA/UK/DE/etc from CLR metadata
+- Bullet awareness checks - Flags soft violations (excessive caps, problematic chars)
+- 12 total queries
 
 **v1.2.0:**
-- ✅ **Bullet point compliance** - Comprehensive validation against Amazon's official requirements
-- 🚫 **Prohibited content detection** - Finds banned chars, emojis, placeholder text, prohibited claims
-- 📝 **Formatting validation** - Checks capitalization, length, punctuation rules
+- Bullet point compliance - Comprehensive validation against Amazon's official requirements
+- Prohibited content detection - Finds banned chars, emojis, placeholder text, prohibited claims
+- Formatting validation - Checks capitalization, length, punctuation rules
 
 **v1.1.0:**
-- 🎯 **RUFUS tier scoring** - Each SKU gets a health rating (Good/Fair/Weak/Critical)
-- 📊 **Catalog-wide summary** - Overall score + distribution stats
-- 🧹 **FBM duplicate filtering** - Auto-skips redundant FBM/MFN SKUs (cleaner reports)
+- RUFUS tier scoring - Each SKU gets a health rating (Good/Fair/Weak/Critical)
+- Catalog-wide summary - Overall score + distribution stats
+- FBM duplicate filtering - Auto-skips redundant FBM/MFN SKUs (cleaner reports)
 
 ## Installation
 
@@ -189,8 +202,8 @@ Want me to rewrite examples for your top 3 SKUs?
 ## Requirements
 
 - **OpenClaw** 2024.2+
-- **amazon-catalog-cli** 1.3.0+ (recommended for marketplace detection and bullet awareness)
-- **Python** 3.7+
+- **amazon-catalog-cli** 2.0.0+ (recommended — includes MCP server, schema introspection, field masks)
+- **Python** 3.10+
 
 ## How It Works
 
