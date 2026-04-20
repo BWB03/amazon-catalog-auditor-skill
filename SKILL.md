@@ -5,11 +5,15 @@ description: Audit Amazon Category Listing Reports (CLRs) for catalog health iss
 
 # Amazon Catalog Auditor
 
+> Deprecated wrapper skill as of April 20, 2026.
+> The maintained implementation now lives in `amazon-catalog-cli`.
+> Route fixes, features, and new pull requests to `https://github.com/BWB03/amazon-catalog-cli`.
+
 Audit Amazon Category Listing Reports using the `amazon-catalog-cli` tool. Identifies missing attributes, RUFUS bullet issues, title problems, and other catalog health concerns.
 
 ## Overview
 
-This skill wraps the `amazon-catalog-cli` PyPI package (v2.0.0+) to provide automated CLR analysis. When a user asks to audit a CLR, check catalog health, or analyze Amazon listings, this skill:
+This skill is a legacy wrapper around the `amazon-catalog-cli` PyPI package. When a user asks to audit a CLR, check catalog health, or analyze Amazon listings, prefer the CLI directly where possible:
 
 1. Locates the CLR file (uploaded or path provided)
 2. Runs appropriate catalog queries
@@ -335,6 +339,8 @@ For CLRs with 1000+ SKUs, expect 10-15 second processing time. Use `--limit` to 
 ## Resources
 
 See `references/queries.md` for detailed documentation on each query type and `scripts/parse_audit.py` for JSON processing helper.
+
+For maintained docs and active development, use `https://github.com/BWB03/amazon-catalog-cli`.
 
 ---
 

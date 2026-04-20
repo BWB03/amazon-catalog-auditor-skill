@@ -1,5 +1,10 @@
 # Amazon Catalog Auditor - OpenClaw Skill
 
+> [!WARNING]
+> Deprecated wrapper repo as of April 20, 2026.
+> Active development now lives in [amazon-catalog-cli](https://github.com/BWB03/amazon-catalog-cli).
+> Please open issues and pull requests there instead of this repository.
+
 **OpenClaw skill for auditing Amazon Category Listing Reports**
 
 This skill wraps the [amazon-catalog-cli](https://github.com/BWB03/amazon-catalog-cli) tool to provide automated CLR analysis within OpenClaw workflows.
@@ -48,6 +53,8 @@ The skill automatically:
 - FBM duplicate filtering - Auto-skips redundant FBM/MFN SKUs (cleaner reports)
 
 ## Installation
+
+This wrapper is no longer the primary distribution target. Install and use `amazon-catalog-cli` directly for the maintained implementation.
 
 ### Prerequisites
 
@@ -272,12 +279,9 @@ Open an issue on GitHub or review the code yourself. Security through transparen
 
 ## Contributing
 
-Contributions welcome! To improve this skill:
+This repository is maintenance-only.
 
-1. Fork the repo
-2. Update SKILL.md or add examples
-3. Test with real CLRs
-4. Submit PR
+For fixes, features, and current documentation, contribute to [amazon-catalog-cli](https://github.com/BWB03/amazon-catalog-cli) instead.
 
 ## Updates
 
@@ -290,8 +294,7 @@ When the skill documentation improves:
 
 ## Support
 
-- **Issues:** [GitHub Issues](https://github.com/BWB03/amazon-catalog-auditor-skill/issues)
-- **CLI Issues:** [amazon-catalog-cli Issues](https://github.com/BWB03/amazon-catalog-cli/issues)
+- **Issues and feature requests:** [amazon-catalog-cli Issues](https://github.com/BWB03/amazon-catalog-cli/issues)
 - **OpenClaw:** [OpenClaw Discord](https://discord.com/invite/clawd)
 
 ## License
